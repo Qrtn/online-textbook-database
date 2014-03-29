@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>{{ title }}</title>
+</head>
+<body onload="javascript: document.forms[0].submit()">
+  <form method="post" action="{{ action }}">
+  {% for name, value in data.items() %}
+    <input type="hidden" name="{{ name }}" value = "{{ value }}" />
+  {% endfor %}
+  <!--<input type="submit" value="Redirecting..." />-->
+  </form>
+</body>
+</html>

@@ -4,6 +4,8 @@ import flask
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
+import resolve
+
 app = flask.Flask(__name__)
 app.db = MongoClient(os.getenv('MONGOHQ_URL')).otd
 
@@ -13,7 +15,12 @@ def favicon():
 
 @app.route('/')
 def index():
-    return '<html><body>Try <a href="/covers/5334c81a8f51ef1966b82cd6">Earth Science</a>. We&apos;re getting there!</body></html>'
+    return '<html><body>Try <a href="/resolve/5334c81a8f51ef1966b82cd6/hrw">Earth Science</a>! (<a href="/covers/5334c81a8f51ef1966b82cd6">Here\'s</a> a picture.) We\'re getting there!</body></html>'
+
+@app.route('/resolve/<objectid>/<access>')
+def textbook(objectid, access):
+    document = app.db.books.find_one(ObjectId(objectid))
+    return resolve.convert[access](document)
 
 @app.route('/covers/<objectid>', methods=['GET'])
 def covers(objectid):
