@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ "$FLASK_ENV" == "development" ]; then
-    python otd
+    python otd.py
 else
     gunicorn otd:app
 fi
