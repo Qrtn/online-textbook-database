@@ -7,7 +7,7 @@ def hrw(document):
     try:
         title = document['title']
         isbn_10 = document['isbn_10']
-        data = document['access']['hrw']
+        data = document['access']['hrw'][0]
     except KeyError:
         raise InvalidFormat
 
