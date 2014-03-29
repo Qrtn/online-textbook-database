@@ -1,17 +1,20 @@
 import os
-from flask import Flask, g
-from pymongo import MongoClient
+import flask
 
-app = Flask(__name__)
-app.client = MongoClient(os.getenv('MONGOHQ_URL'))
+from pymongo import MongoClient
+from bson.objectid import ObjectId
+
+app = flask.Flask(__name__)
+app.db = MongoClient(os.getenv('MONGOHQ_URL')).otd
 
 @app.route('/')
 def index():
-    return 'Hello World!'
+    return '<html><body>Try <a href="/covers/5334c81a8f51ef1966b82cd6">Earth Science</a>. We&apos;re getting there!</body></html>'
 
-@app.route('/covers/<id>', methods=['GET'])
-def covers():
-    return
+@app.route('/covers/<objectid>', methods=['GET'])
+def covers(objectid):
+    image = app.db.books.find_one(ObjectId(objectid))['image']
+    return flask.Response(image['data'], mimetype=image['content_type'])
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
