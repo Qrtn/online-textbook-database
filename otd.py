@@ -15,15 +15,15 @@ def favicon():
 
 @app.route('/')
 def index():
-    return '<html><body>Try <a href="/resolve/5334c81a8f51ef1966b82cd6/hrw">Earth Science</a>! (<a href="/covers/5334c81a8f51ef1966b82cd6">Here\'s</a> a picture.) We\'re getting there!</body></html>'
+    return '<html><body>Try <a href="/link/5334c81a8f51ef1966b82cd6/hrw">Earth Science</a>! (<a href="/cover/5334c81a8f51ef1966b82cd6">Here\'s</a> a picture.) We\'re getting there!</body></html>'
 
-@app.route('/resolve/<objectid>/<access>')
+@app.route('/link/<objectid>/<access>', methods=['GET'])
 def textbook(objectid, access):
     document = app.db.books.find_one(ObjectId(objectid))
     return resolve.convert[access](document)
 
-@app.route('/covers/<objectid>', methods=['GET'])
-def covers(objectid):
+@app.route('/cover/<objectid>', methods=['GET'])
+def cover(objectid):
     image = app.db.books.find_one(ObjectId(objectid))['image']
     return flask.Response(image['data'], mimetype=image['content_type'])
 
