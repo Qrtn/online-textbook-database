@@ -15,7 +15,7 @@ def favicon():
 
 @app.route('/')
 def index():
-    return '<html><body>Try <a href="/link/5334c81a8f51ef1966b82cd6/hrw">Earth Science</a>! (<a href="/cover/5334c81a8f51ef1966b82cd6">Here\'s</a> a picture.) We\'re getting there!</body></html>'
+    return flask.render_template('index.html', documents=app.db.books.find())
 
 @app.route('/link/<objectid>/<access>', methods=['GET'])
 def textbook(objectid, access):

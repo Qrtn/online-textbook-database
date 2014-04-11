@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Online Textbook Database</title>
+    <style>
+        .book { margin: 0px 5px; display: table; float: left; }
+        .book img { height: 300px; }
+        .book div { display: table-caption; caption-side: bottom; text-align: center; }
+    </style>
+</head>
+<body>
+{% for doc in documents %}
+    <div class="book" id="{{ doc['_id'] }}">
+        <img src="/cover/{{ doc['_id'] }}" /><br />
+        <div>
+            <b>{{ doc['title'] }}</b><br />
+            {{ doc['volume'] or '' }}<br />
+        {% for method in doc['access'] %}
+            <a href="/link/{{ doc['_id'] }}/{{ method }}">{{ method }}</a>
+        {% endfor %}
+        </div>
+    </div>
+{% endfor %}
+</body>
+</html>
