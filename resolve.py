@@ -3,11 +3,11 @@ import flask
 class InvalidFormat(Exception):
     pass
 
-def hrw(document):
+def hrw(**kwargs):
     try:
-        title = document['title']
-        isbn_10 = document['isbn_10']
-        data = document['access']['hrw'][0]
+        title = kwargs['document']['title']
+        isbn_10 = kwargs['document']['isbn_10']
+        data = kwargs['document']['access']['hrw'][kwargs['index']]
     except KeyError:
         raise InvalidFormat
 
@@ -15,10 +15,10 @@ def hrw(document):
     return flask.render_template('post.html',
             title=title, action='http://my.hrw.com/index.jsp', data=data)
 
-def glencoe_literature(document):
+def glencoe_literature(**kwargs):
     try:
-        title = document['title']
-        isbn_13 = document['isbn_13']
+        title = kwargs['document']['title']
+        isbn_13 = kwargs['document']['isbn_13']
     except KeyError:
         raise InvalidFormat
 

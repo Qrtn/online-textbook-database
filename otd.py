@@ -18,9 +18,10 @@ def index():
     return flask.render_template('index.html', documents=app.db.books.find())
 
 @app.route('/link/<objectid>/<access>', methods=['GET'])
-def textbook(objectid, access):
+@app.route('/link/<objectid>/<access>/<int:index>', methods=['GET'])
+def textbook(objectid, access, index=0):
     document = app.db.books.find_one(ObjectId(objectid))
-    return resolve.convert[access](document)
+    return resolve.convert[access](document=document, index=index)
 
 @app.route('/cover/<objectid>', methods=['GET'])
 def cover(objectid):
