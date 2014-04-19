@@ -4,11 +4,12 @@
     <meta charset="utf-8">
     <title>{{ title }}</title>
 </head>
-<body onload="javascript: document.forms[0].submit()">
+<body onload="document.forms[0].submit()">
     <form method="post" action="{{ action }}">
-    {% for name, value in data.items() %}
-        <input type="hidden" name="{{ name }}" value = "{{ value }}" />
-    {% endfor %}
+    {%- for name, value in data.items() %}
+        <input type="hidden" name="{{ name }}" value="{{ value }}">
+    {%- endfor %}
+        <noscript><input type="submit" value="Redirecting..."></noscript>
     </form>
 </body>
 </html>
