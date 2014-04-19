@@ -13,11 +13,10 @@ def hrw(**kwargs):
 
     data['url'] = 'http://my.hrw.com/tabnav/controller.jsp?isbn=' + isbn_10
     return flask.render_template('post.html',
-            title=title, action='http://my.hrw.com/index.jsp', data=data)
+        title=title, action='http://my.hrw.com/index.jsp', data=data)
 
-def glencoe_literature(**kwargs):
+def glencoe_swf_lit(**kwargs):
     try:
-        title = kwargs['document']['title']
         isbn_13 = kwargs['document']['isbn_13']
     except KeyError:
         raise InvalidFormat
@@ -26,5 +25,5 @@ def glencoe_literature(**kwargs):
 
 convert = {
     'hrw': hrw,
-    'glencoe_lit': glencoe_literature,
+    'glencoe_swf_lit': glencoe_swf_lit,
 }
