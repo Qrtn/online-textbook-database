@@ -25,7 +25,15 @@ def index():
 @app.route('/link/<objectid>/<access>/<int:index>', methods=['GET'])
 def textbook(objectid, access, index=0):
     document = app.db.books.find_one(ObjectId(objectid))
-    return resolve.convert[access](document=document, index=index)
+    try:
+        page = resolve.convert[access](document=document, index=index)
+    except KeyError:
+        return 'No such method.'
+    except resolve.InvalidFormat:
+        return 'Invalid method for specified book.'
+    except IndexError:
+        return 'Invalid index for specified method.'
+    return page
 
 @app.route('/cover/<objectid>', methods=['GET'])
 def cover(objectid):
