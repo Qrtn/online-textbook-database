@@ -36,11 +36,11 @@
         <img src="/cover/{{ doc['_id'] }}" alt="{{ doc['title'] }}"><br>
         <div>
             <b>{{ doc['title'] }}</b><br>
-            {% if doc['volume'] %}{{ doc['volume'] }}<br>{% endif %}
+            {{ (doc['volume'] + '<br>'|safe) if doc['volume'] }}
         {%- for method, data in doc['access'].items() %}
             {%- if data is list %}
                 {% for index in range(data|length)  %}
-            <a href="/link/{{ doc['_id'] }}/{{ method }}/{{ index }}">{{ method }}.{{ index }}</a>
+            <a href="/link/{{ doc['_id'] }}/{{ method }}/{{ index }}">{{ method }}.{{ index }}</a>{{ '<br>'|safe if loop.last }}
                 {% endfor %}
             {% else %}
             <a href="/link/{{ doc['_id'] }}/{{ method }}">{{ method }}</a><br>
