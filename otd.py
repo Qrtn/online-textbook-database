@@ -9,6 +9,10 @@ import resolve
 app = flask.Flask(__name__)
 app.db = MongoClient(os.getenv('MONGOHQ_URL')).otd
 
+def is_list(value):
+    return isinstance(value, list)
+app.jinja_env.tests['list'] = is_list
+
 @app.route('/favicon.ico')
 def favicon():
     return app.send_static_file('favicon.ico')

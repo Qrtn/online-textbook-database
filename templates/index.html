@@ -38,7 +38,7 @@
             <b>{{ doc['title'] }}</b><br>
             {% if doc['volume'] %}{{ doc['volume'] }}<br>{% endif %}
         {%- for method, data in doc['access'].items() %}
-            {%- if data is sequence %}
+            {%- if data is list %}
                 {% for index in range(data|length)  %}
             <a href="/link/{{ doc['_id'] }}/{{ method }}/{{ index }}">{{ method }}.{{ index }}</a>
                 {% endfor %}
