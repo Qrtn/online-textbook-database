@@ -36,7 +36,7 @@
         <img src="/cover/{{ doc['_id'] }}" alt="{{ doc['title'] }}"><br>
         <div>
             <b>{{ doc['title'] }}</b><br>
-            {{ (doc['volume'] + '<br>'|safe) if doc['volume'] }}
+            {{ '{} &copy; {}<br>'.format(doc['volume'], doc['copyright'])|safe }}
         {%- for method, data in doc['access'].items() %}
             {%- if data is list %}
                 {% for index in range(data|length)  %}
