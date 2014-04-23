@@ -1,3 +1,4 @@
+from urllib.parse import urlencode
 import flask
 
 class InvalidFormat(Exception):
@@ -12,8 +13,7 @@ def hrw(**kwargs):
         raise InvalidFormat
 
     data['url'] = 'http://my.hrw.com/tabnav/controller.jsp?isbn=' + isbn_10
-    return flask.render_template('post.html',
-        title=title, action='http://my.hrw.com/index.jsp', data=data)
+    return flask.render_template('post.html', title=title, action='http://my.hrw.com/index.jsp', data=data)
 
 def glencoe_swf_lit(**kwargs):
     try:
@@ -25,7 +25,7 @@ def glencoe_swf_lit(**kwargs):
 
 def glencoe_showbook(**kwargs):
     try:
-        title = kwargs['document']
+        title = kwargs['document']['title']
         data = {'access_code': kwargs['document']['access']['glencoe_showbook'][kwargs['index']]}
     except KeyError:
         raise InvalidFormat
@@ -41,9 +41,28 @@ def glencoe_pdf_la(**kwargs):
 
     return flask.redirect('http://www.glencoe.com/cgi-bin/pdfServer.pl/ebooks/language_arts/{}/swopen.pdf'.format(isbn_13))
 
+def glencoe_pdf_wl(**kwargs):
+    try:
+        path = kwargs['document']['access']['glencoe_pdf_wl']
+    except KeyError:
+        raise InvalidFormat
+
+    return flask.redirect('http://www.glencoe.com/cgi-bin/pdfServer.pl/sec/worldlanguages/{}'.format(path))
+
+def glencoe_wl_locator(**kwargs):
+    try:
+        data = kwargs['document']['access']['glencoe_wl_locator']
+    except KeyError:
+        raise InvalidFormat
+
+    return flask.redirect('http://www.glencoe.com/sec/worldlanguages/french/ose/ose_locator.php?' + urlencode(data))
+
+
 convert = {
     'hrw': hrw,
     'glencoe_swf_lit': glencoe_swf_lit,
     'glencoe_showbook': glencoe_showbook,
     'glencoe_pdf_la': glencoe_pdf_la,
+    'glencoe_pdf_wl': glencoe_pdf_wl,
+    'glencoe_wl_locator': glencoe_wl_locator,
 }
