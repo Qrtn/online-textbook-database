@@ -23,7 +23,7 @@
         .book div {
             display: table-caption;
             caption-side: bottom;
-            height: 130px;
+            height: 115px;
             overflow: auto;
             text-align: center;
         }
@@ -39,9 +39,11 @@
             {{ '{} &copy; {}<br>'.format(doc['volume'], doc['copyright'])|safe }}
         {%- for method, data in doc['access'].items() %}
             {%- if data is list %}
-                {% for index in range(data|length)  %}
-            <a href="/link/{{ doc['_id'] }}/{{ method }}/{{ index }}">{{ method }}.{{ index }}</a>{{ '<br>'|safe if loop.last }}
-                {% endfor %}
+            <a>{{ method }}</a>
+            {% for index in range(data|length) %}
+            <a href="/link/{{ doc['_id'] }}/{{ method }}/{{ index }}">{{ index }}</a>
+            {% endfor %}
+            <br>
             {% else %}
             <a href="/link/{{ doc['_id'] }}/{{ method }}">{{ method }}</a><br>
             {% endif %}
