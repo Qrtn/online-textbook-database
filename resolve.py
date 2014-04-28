@@ -1,3 +1,4 @@
+import os
 from urllib.parse import urlencode
 import flask
 
@@ -57,6 +58,20 @@ def glencoe_wl_locator(**kwargs):
 
     return flask.redirect('http://www.glencoe.com/sec/worldlanguages/french/ose/ose_locator.php?' + urlencode(data))
 
+def classzone_qrtn(**kwargs):
+    try:
+        title = kwargs['document']['title']
+        resource = kwargs['document']['access']['classzone_qrtn']
+    except KeyError:
+        raise InvalidFormat
+
+    data = {
+        'username': 'Qrtn',
+        'password': os.getenv('CLASSZONE_QRTN_PASSWORD'),
+        'redirectUrl': 'http://www.classzone.com/cz/books/{}/secured/resources/applications/ebook/index.jsp'.format(resource)
+    }
+    return flask.render_template('post.html', title=title, action='http://www.classzone.com/cz/login.htm', data=data)
+
 
 convert = {
     'hrw': hrw,
@@ -65,4 +80,5 @@ convert = {
     'glencoe_pdf_la': glencoe_pdf_la,
     'glencoe_pdf_wl': glencoe_pdf_wl,
     'glencoe_wl_locator': glencoe_wl_locator,
+    'classzone_qrtn': classzone_qrtn,
 }
