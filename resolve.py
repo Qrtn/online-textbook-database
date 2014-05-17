@@ -72,6 +72,17 @@ def classzone_qrtn(**kwargs):
     }
     return flask.render_template('post.html', title=title, action='http://www.classzone.com/cz/login.htm', data=data)
 
+def qrtn_dropbox(**kwargs):
+    fields = {}
+    try:
+        fields['isbn_13'] = kwargs['document']['isbn_13']
+        fields['index'] = kwargs['document']['access']['qrtn_dropbox']
+    except KeyError:
+        raise InvalidFormat
+    fields['uid'] = os.getenv('QRTN_DROPBOX_UID')
+
+    return flask.redirect('https://dl.dropboxusercontent.com/u/{uid}/{isbn_13}/{index}'.format(**fields))
+
 
 convert = {
     'hrw': hrw,
@@ -81,4 +92,5 @@ convert = {
     'glencoe_pdf_wl': glencoe_pdf_wl,
     'glencoe_wl_locator': glencoe_wl_locator,
     'classzone_qrtn': classzone_qrtn,
+    'qrtn_dropbox': qrtn_dropbox,
 }
