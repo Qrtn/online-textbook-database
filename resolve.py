@@ -58,6 +58,14 @@ def glencoe_wl_locator(**kwargs):
 
     return flask.redirect('http://www.glencoe.com/sec/worldlanguages/french/ose/ose_locator.php?' + urlencode(data))
 
+def glencoe_health_locator(**kwargs):
+    try:
+        data = kwargs['document']['access']['glencoe_health_locator']
+    except KeyError:
+        raise InvalidFormat
+
+    return flask.redirect('http://www.glencoe.com/sites/common_assets/health/ose/ose_locator.php?' + urlencode(data))
+
 def classzone_qrtn(**kwargs):
     try:
         title = kwargs['document']['title']
@@ -91,6 +99,7 @@ convert = {
     'glencoe_pdf_la': glencoe_pdf_la,
     'glencoe_pdf_wl': glencoe_pdf_wl,
     'glencoe_wl_locator': glencoe_wl_locator,
+    'glencoe_health_locator': glencoe_health_locator,
     'classzone_qrtn': classzone_qrtn,
     'qrtn_dropbox': qrtn_dropbox,
 }
