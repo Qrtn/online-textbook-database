@@ -50,6 +50,14 @@ def glencoe_pdf_wl(**kwargs):
 
     return flask.redirect('http://www.glencoe.com/cgi-bin/pdfServer.pl/sec/worldlanguages/{}'.format(path))
 
+def glencoe_pdfserver(**kwargs):
+    try:
+        path = kwargs['document']['access']['glencoe_pdfserver']
+    except KeyError:
+        raise InvalidFormat
+
+    return flask.redirect('http://www.glencoe.com/cgi-bin/pdfServer.pl/{}'.format(path))
+
 def glencoe_wl_locator(**kwargs):
     try:
         data = kwargs['document']['access']['glencoe_wl_locator']
@@ -98,6 +106,7 @@ convert = {
     'glencoe_showbook': glencoe_showbook,
     'glencoe_pdf_la': glencoe_pdf_la,
     'glencoe_pdf_wl': glencoe_pdf_wl,
+    'glencoe_pdfserver': glencoe_pdfserver,
     'glencoe_wl_locator': glencoe_wl_locator,
     'glencoe_health_locator': glencoe_health_locator,
     'classzone_qrtn': classzone_qrtn,
