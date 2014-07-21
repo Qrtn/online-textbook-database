@@ -42,14 +42,6 @@ def glencoe_pdf_la(**kwargs):
 
     return flask.redirect('http://www.glencoe.com/cgi-bin/pdfServer.pl/ebooks/language_arts/{}/swopen.pdf'.format(isbn_13))
 
-def glencoe_pdf_wl(**kwargs):
-    try:
-        path = kwargs['document']['access']['glencoe_pdf_wl']
-    except KeyError:
-        raise InvalidFormat
-
-    return flask.redirect('http://www.glencoe.com/cgi-bin/pdfServer.pl/sec/worldlanguages/{}'.format(path))
-
 def glencoe_pdfserver(**kwargs):
     try:
         path = kwargs['document']['access']['glencoe_pdfserver']
@@ -105,7 +97,6 @@ convert = {
     'glencoe_swf_lit': glencoe_swf_lit,
     'glencoe_showbook': glencoe_showbook,
     'glencoe_pdf_la': glencoe_pdf_la,
-    'glencoe_pdf_wl': glencoe_pdf_wl,
     'glencoe_pdfserver': glencoe_pdfserver,
     'glencoe_wl_locator': glencoe_wl_locator,
     'glencoe_health_locator': glencoe_health_locator,
