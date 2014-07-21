@@ -7,7 +7,7 @@ from bson.objectid import ObjectId
 import resolve
 
 app = flask.Flask(__name__)
-app.db = MongoClient(os.getenv('MONGOHQ_URL')).otd
+app.db = MongoClient(os.getenv('MONGOLAB_URI')).otd
 
 def is_list(value):
     return isinstance(value, list)
