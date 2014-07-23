@@ -3,5 +3,5 @@
 if [ "$FLASK_ENV" == "development" ]; then
     python otd.py
 else
-    gunicorn otd:app
+    gunicorn otd:app --workers $WEB_CONCURRENCY
 fi
