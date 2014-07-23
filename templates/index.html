@@ -34,6 +34,22 @@
 </head>
 <body>
     <img src="/static/otd.png" id="logo" alt="Logo" width="128" height="128"><h1>OTD</h1>
+    <form action="/" method="get">
+        <input type="text" name="query" value="{{ query or '' }}" placeholder="search title, volume, edition, publisher, copyright year, ISBN-10, ISBN-13" size="70" autofocus><input type="submit" value=">"><br>
+        results per page
+        <select name="num">
+        {%- for n in (10, 20, 30, 40, 50, total) %}
+            <option value="{{ n }}"{{ ' selected' if num == n }}>{{ 'all' if loop.last else n }}
+        {%- endfor %}
+        {%- if num not in (10, 20, 30, 40, 50, total) %}
+            <option value="{{ num }}" selected>{{ num }}
+        {%- endif %}
+        </select>
+        <a{{ ' href=' + prev_href if prev_href is not none }}>&lt; prev</a>
+        | {{ from_n }} &ndash; {{ to_n }} of {{ total }} |
+        <a{{ ' href=' + next_href if next_href is not none }}>next &gt;</a>
+    </form>
+    <br>
 {% for doc in documents %}
     <div class="book">
         <img src="/cover/{{ doc['_id'] }}" alt="{{ doc['title'] }}"><br>
