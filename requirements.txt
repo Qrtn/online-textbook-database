@@ -2,7 +2,7 @@ Flask==0.10.1
 Jinja2==2.7.2
 MarkupSafe==0.19
 Werkzeug==0.9.4
-fuzzywuzzy==0.2.1
+-e git://github.com/seatgeek/fuzzywuzzy.git@f773b295dd4abaf3d47000ddbdd0d01150125662#egg=fuzzywuzzy-master
 gunicorn==18.0
 itsdangerous==0.23
 pymongo==2.6.3
