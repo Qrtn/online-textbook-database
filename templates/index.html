@@ -19,9 +19,9 @@
             <option value="{{ num }}" selected>{{ num }}
         {%- endif %}
         </select>
-        <a{{ ' href=' + prev_href if prev_href is not none }}>&lt; prev</a>
+        <a{{ ' href="{}"'.format(prev_href|e)|safe if prev_href is not none }}>&lt; prev</a>
         | {{ from_n }} &ndash; {{ to_n }} of {{ total }} |
-        <a{{ ' href=' + next_href if next_href is not none }}>next &gt;</a>
+        <a{{ ' href="{}"'.format(next_href|e)|safe if next_href is not none }}>next &gt;</a>
     </form>
     <br>
 {% for doc in documents %}
