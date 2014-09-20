@@ -9,7 +9,8 @@
 <body>
     <img src="/static/otd.png" id="logo" alt="Logo" width="128" height="128"><h1>OTD</h1>
     <form action="/" method="get">
-        <input type="text" name="query" value="{{ query or '' }}" placeholder="search title, volume, edition, publisher, copyright year, ISBN-10, ISBN-13" size="70" autofocus><input type="submit" value=">"><br>
+        <input type="text" name="query" value="{{ query or '' }}" placeholder="search title, volume, edition, publisher, copyright year, ISBN-10, ISBN-13" size="70" autofocus><input type="submit" value=">">
+        <a href="/help">help</a><br>
         results per page
         <select name="num">
         {%- for n in (10, 20, 30, 40, 50, total) %}

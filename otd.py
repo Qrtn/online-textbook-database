@@ -86,5 +86,9 @@ def search():
         from_n=(start + 1), to_n=min(start + num, total), prev_href=prev_href, next_href=next_href,
         query=query, num=num, total=total)
 
+@app.route('/help')
+def help():
+    return app.send_static_file('help.html')
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
