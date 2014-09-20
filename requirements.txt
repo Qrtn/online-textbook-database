@@ -1,9 +1,9 @@
 Flask==0.10.1
-Jinja2==2.7.2
-MarkupSafe==0.19
-Werkzeug==0.9.4
--e git://github.com/seatgeek/fuzzywuzzy.git@f773b295dd4abaf3d47000ddbdd0d01150125662#egg=fuzzywuzzy-master
-gunicorn==18.0
-itsdangerous==0.23
-pymongo==2.6.3
+Jinja2==2.7.3
+MarkupSafe==0.23
+Werkzeug==0.9.6
+fuzzywuzzy==0.3.2
+gunicorn==19.1.1
+itsdangerous==0.24
+pymongo==2.7.2
 python-Levenshtein==0.11.2
