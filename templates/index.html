@@ -23,7 +23,7 @@
         .book div {
             display: table-caption;
             caption-side: bottom;
-            height: 130px;
+            height: 135px;
             overflow: auto;
             text-align: center;
         }
@@ -56,7 +56,9 @@
         <img src="/cover/{{ doc['_id'] }}" alt="{{ doc['title'] }}"><br>
         <div>
             <b>{{ doc['title'] }}</b><br>
-            {{ doc['volume'] }} &copy; {{ doc['copyright'] }}<br>
+            {{ doc['volume'] }}{{ ', ' if doc['volume'] is defined and doc['edition'] is defined }}{{ doc['edition'] }}
+            {{ '<br>'|safe if doc['volume'] is defined or doc['edition'] is defined }}
+            <small><i>&copy; {{ doc['copyright'] }} {{ doc['publisher'] }}</i></small><br>
             <small>ISBN {{ doc['isbn_10'] }}/{{ doc['isbn_13'] }}</small><br>
         {%- for method, data in doc['access'].items() %}
             {%- if data is list %}
