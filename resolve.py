@@ -24,6 +24,14 @@ def glencoe_swf_lit(**kwargs):
 
     return flask.redirect('http://www.glencoe.com/ebooks/literature/{}/glencoe_main.html'.format(isbn_13))
 
+def glencoe_swf_ss(**kwargs):
+    try:
+        isbn_13 = kwargs['document']['isbn_13']
+    except KeyError:
+        raise InvalidFormat
+
+    return flask.redirect('http://www.glencoe.com/ebooks/social_studies/{}/mhssg_main.html'.format(isbn_13))
+
 def glencoe_showbook(**kwargs):
     try:
         title = kwargs['document']['title']
@@ -57,6 +65,14 @@ def glencoe_wl_locator(**kwargs):
         raise InvalidFormat
 
     return flask.redirect('http://www.glencoe.com/sec/worldlanguages/french/ose/ose_locator.php?' + urlencode(data))
+
+def glencoe_ss_locator(**kwargs):
+    try:
+        data = kwargs['document']['access']['glencoe_ss_locator']
+    except KeyError:
+        raise InvalidFormat
+
+    return flask.redirect('http://www.glencoe.com/sites/common_assets/socialstudies/ose/ose_locator.php?' + urlencode(data))
 
 def glencoe_health_locator(**kwargs):
     try:
@@ -95,10 +111,12 @@ def qrtn_dropbox(**kwargs):
 convert = {
     'hrw': hrw,
     'glencoe_swf_lit': glencoe_swf_lit,
+    'glencoe_swf_ss': glencoe_swf_ss,
     'glencoe_showbook': glencoe_showbook,
     'glencoe_pdf_la': glencoe_pdf_la,
     'glencoe_pdfserver': glencoe_pdfserver,
     'glencoe_wl_locator': glencoe_wl_locator,
+    'glencoe_ss_locator': glencoe_ss_locator,
     'glencoe_health_locator': glencoe_health_locator,
     'classzone_qrtn': classzone_qrtn,
     'qrtn_dropbox': qrtn_dropbox,
