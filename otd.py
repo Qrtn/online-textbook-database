@@ -2,7 +2,6 @@ import os
 import flask
 
 from pymongo import MongoClient
-from bson.objectid import ObjectId
 
 from fuzzywuzzy import process
 
@@ -31,10 +30,10 @@ app.jinja_env.tests['list'] = is_list
 def favicon():
     return app.send_static_file('favicon.ico')
 
-@app.route('/link/<objectid>/<access>', methods=['GET'])
-@app.route('/link/<objectid>/<access>/<int:index>', methods=['GET'])
-def textbook(objectid, access, index=0):
-    document = app.db.books.find_one(ObjectId(objectid))
+@app.route('/link/<int:id_>/<access>', methods=['GET'])
+@app.route('/link/<int:id_>/<access>/<int:index>', methods=['GET'])
+def textbook(id_, access, index=0):
+    document = app.db.books.find_one(id_)
     try:
         page = resolve.convert[access](document=document, index=index)
     except KeyError:
@@ -45,9 +44,9 @@ def textbook(objectid, access, index=0):
         return 'Invalid index for specified method.'
     return page
 
-@app.route('/cover/<objectid>', methods=['GET'])
-def cover(objectid):
-    image = app.db.books.find_one(ObjectId(objectid))['image']
+@app.route('/cover/<int:id_>', methods=['GET'])
+def cover(id_):
+    image = app.db.books.find_one(id_)['image']
     return flask.Response(image['data'], mimetype=image['content_type'])
 
 def extract(query=None, start=None, stop=None):
