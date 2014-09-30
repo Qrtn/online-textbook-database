@@ -22,9 +22,9 @@ queries = {document['_id']: document['query'] for document in app.db.books.aggre
     ]}}}
 ])['result']}
 
+@app.template_test('list')
 def is_list(value):
     return isinstance(value, list)
-app.jinja_env.tests['list'] = is_list
 
 @app.route('/favicon.ico')
 def favicon():
