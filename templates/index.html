@@ -55,7 +55,7 @@
     <br>
 {% for doc in documents %}
     <div class="book">
-        <img src="/cover/{{ doc['_id'] }}" alt="{{ doc['title'] }}"><br>
+        <img src="//{{ config.S3_BUCKET }}.s3.amazonaws.com/i/{{ doc['_id'] }}.y300" alt="{{ doc['title'] }}"><br>
         <div>
             <b>{{ doc['title'] }}</b><br>
             {{ doc['volume'] }}{{ ', ' if doc['volume'] is defined and doc['edition'] is defined }}{{ doc['edition'] }}

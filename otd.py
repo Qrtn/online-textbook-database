@@ -46,11 +46,6 @@ def textbook(id_, access, index=0):
         return 'Invalid index for specified method.'
     return page
 
-@app.route('/cover/<int:id_>', methods=['GET'])
-def cover(id_):
-    image = app.db.books.find_one(id_)['image']
-    return flask.Response(image['data'], mimetype=image['content_type'])
-
 def extract(query=None, start=None, stop=None):
     if query is None:
         yield from app.db.books.find({}, {'image': 0})[start:stop]
