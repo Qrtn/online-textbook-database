@@ -30,7 +30,7 @@ def is_list(value):
 
 @app.route('/favicon.ico')
 def favicon():
-    return app.send_static_file('favicon.ico')
+    return flask.redirect('http://otd-io.s3.amazonaws.com/favicon.ico')
 
 @app.route('/link/<int:id_>/<access>', methods=['GET'])
 @app.route('/link/<int:id_>/<access>/<int:index>', methods=['GET'])
