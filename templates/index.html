@@ -35,7 +35,7 @@
     {% include 'analytics.html' %}
 </head>
 <body>
-    <img src="/static/otd.png" id="logo" alt="Logo" width="128" height="128"><h1>OTD</h1>
+    <img src="//{{ config.S3_BUCKET }}.s3.amazonaws.com/logo.y128.png" id="logo" alt="Logo" width="128" height="128"><h1>OTD</h1>
     <form action="/" method="get">
         <input type="text" name="query" value="{{ query or '' }}" placeholder="search title, volume, edition, publisher, copyright year, ISBN-10, ISBN-13" size="70" autofocus><input type="submit" value=">">
         <a href="/help">help</a><br>
