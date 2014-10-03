@@ -1,6 +1,7 @@
-import os
 from urllib.parse import urlencode
 import flask
+
+import config
 
 class InvalidFormat(Exception):
     pass
@@ -91,7 +92,7 @@ def classzone_qrtn(**kwargs):
 
     data = {
         'username': 'Qrtn',
-        'password': os.getenv('CLASSZONE_QRTN_PASSWORD'),
+        'password': config.CLASSZONE_QRTN_PASSWORD,
         'redirectUrl': 'http://www.classzone.com/cz/books/{}/secured/resources/applications/ebook/index.jsp'.format(resource)
     }
     return flask.render_template('post.html', title=title, action='http://www.classzone.com/cz/login.htm', data=data)
@@ -103,7 +104,7 @@ def qrtn_dropbox(**kwargs):
         fields['index'] = kwargs['document']['access']['qrtn_dropbox']
     except KeyError:
         raise InvalidFormat
-    fields['uid'] = os.getenv('QRTN_DROPBOX_UID')
+    fields['uid'] = config.QRTN_DROPBOX_UID
 
     return flask.redirect('https://dl.dropboxusercontent.com/u/{uid}/{isbn_13}/{index}'.format(**fields))
 

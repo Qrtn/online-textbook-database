@@ -5,10 +5,12 @@ from pymongo import MongoClient
 
 from fuzzywuzzy import process
 
+import config
 import resolve
 
 app = flask.Flask(__name__)
-app.db = MongoClient(os.getenv('MONGOLAB_URI')).otd
+app.config.from_object(config)
+app.db = MongoClient(config.MONGOLAB_URI).otd
 
 queries = {document['_id']: document['query'] for document in app.db.books.aggregate([
     {'$project': {'query': {'$concat': [
@@ -90,4 +92,4 @@ def help():
     return app.send_static_file('help.html')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0')
