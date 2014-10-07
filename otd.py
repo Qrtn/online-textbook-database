@@ -48,10 +48,10 @@ def textbook(id_, access, index=0):
 
 def extract(query=None, start=None, stop=None):
     if query is None:
-        yield from app.db.books.find({}, {'image': 0})[start:stop]
+        yield from app.db.books.find()[start:stop]
     else:
         for match in process.extract(query, queries, limit=None)[start:stop]:
-            yield app.db.books.find_one(match[2], {'image': 0})
+            yield app.db.books.find_one(match[2])
 
 @app.route('/')
 def search():
