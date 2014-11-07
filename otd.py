@@ -8,7 +8,7 @@ from fuzzywuzzy import process
 import config
 import resolve
 
-app = flask.Flask(__name__)
+app = flask.Flask(__name__, static_folder=None)
 app.config.from_object(config)
 app.db = MongoClient(config.MONGOLAB_URI).otd
 
@@ -34,7 +34,7 @@ def favicon():
 
 @app.route('/link/<int:id_>/<access>', methods=['GET'])
 @app.route('/link/<int:id_>/<access>/<int:index>', methods=['GET'])
-def textbook(id_, access, index=0):
+def link(id_, access, index=0):
     document = app.db.books.find_one(id_)
     try:
         page = resolve.convert[access](document=document, index=index)
@@ -84,7 +84,7 @@ def search():
 
 @app.route('/help')
 def help():
-    return app.send_static_file('help.html')
+    return app.send_file('static/help.html')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
