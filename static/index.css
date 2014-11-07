@@ -1,0 +1,91 @@
+.title { font-weight: bold; }
+.copyright { font-size: small; font-style: italic; }
+.isbn { font-size: small; }
+
+.copyright, .isbn { margin: 2px 0; }
+
+.access {
+    font-family: monospace;
+}
+
+@media (min-width: 701px) {
+    #top {
+        margin-bottom: 20px;
+    }
+    #logo {
+        float: left;
+    }
+    h1 {
+        font-size: 128px;
+        line-height: 128px;
+        margin: 0 0 5px 150px;
+    }
+    #query {
+        width: 500px;
+    }
+    #advanced {
+        margin-top: 4px;
+    }
+    .book {
+        display: table;
+        width: 1px;
+        float: left;
+        padding: 0 3px;
+        text-align: center;
+    }
+    .book img {
+        height: 300px;
+    }
+    .words {
+        height: 150px;
+        overflow-y: auto;
+    }
+    .access {
+        line-height: 20px;
+    }
+}
+
+@media (max-width: 700px) {
+    #top {
+        display: table;
+    }
+    #logo {
+        display: table-cell;
+        height: 48px;
+        width: 48px;
+        margin-right: 10px;
+    }
+    h1, #submit, #help, #advanced {
+        display: none;
+    }
+    #query {
+        width: 100%;
+        padding: 5px;
+        font-size: 16px;
+        height: 36px;
+        box-sizing: border-box;
+    }
+    form {
+        display: table-cell;
+        vertical-align: middle;
+        width: 100%;
+    }
+
+    .book {
+        clear: both;
+        overflow: hidden;
+        margin: 5px 0;
+        padding: 5px;
+        border: 1px dotted black;
+    }
+    .book img {
+        width: 30%;
+        float: left;
+        margin-right: 10px;
+    }
+    .details {
+    }
+    .access {
+        font-size: xx-large;
+    }
+}

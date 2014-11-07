@@ -2,77 +2,61 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="initial-scale=1">
     <title>Online Textbook Database</title>
-    <link rel="icon" href="http://otd-io.s3.amazonaws.com/favicon.ico">
-    <style>
-        #logo {
-            float: left;
-        }
-        h1 {
-            font-size: 110px;
-            margin: 0 0 5px 150px;
-        }
-        .book {
-            display: table;
-            float: left;
-            padding: 0 3px;
-        }
-        .book img {
-            height: 300px;
-        }
-        .book div {
-            display: table-caption;
-            caption-side: bottom;
-            height: 135px;
-            overflow: auto;
-            text-align: center;
-        }
-        .book a {
-            font-family: monospace;
-        }
-    </style>
+    <link rel="icon" href="//{{ config.S3_BUCKET }}.s3.amazonaws.com/favicon.ico">
+    <link rel="stylesheet" href="//{{ config.S3_BUCKET }}.s3.amazonaws.com/index.css">
 
     {% include 'analytics.html' %}
 </head>
 <body>
-    <img src="//{{ config.S3_BUCKET }}.s3.amazonaws.com/logo.y128.png" id="logo" alt="Logo" width="128" height="128"><h1>OTD</h1>
-    <form action="/" method="get">
-        <input type="text" name="query" value="{{ query or '' }}" placeholder="search title, volume, edition, publisher, copyright year, ISBN-10, ISBN-13" size="70" autofocus><input type="submit" value=">">
-        <a href="/help">help</a><br>
-        results per page
-        <select name="num">
-        {%- for n in (10, 20, 30, 40, 50, total) %}
-            <option value="{{ n }}"{{ ' selected' if num == n }}>{{ 'all' if loop.last else n }}
-        {%- endfor %}
-        {%- if num not in (10, 20, 30, 40, 50, total) %}
-            <option value="{{ num }}" selected>{{ num }}
-        {%- endif %}
-        </select>
-        <a{{ ' href="{}"'.format(prev_href|e)|safe if prev_href is not none }}>&lt; prev</a>
-        | {{ from_n }} &ndash; {{ to_n }} of {{ total }} |
-        <a{{ ' href="{}"'.format(next_href|e)|safe if next_href is not none }}>next &gt;</a>
-    </form>
-    <br>
+    <div id="top">
+        <img src="//{{ config.S3_BUCKET }}.s3.amazonaws.com/logo.y128.png" id="logo" alt="Online Textbook Database" width="128" height="128"><h1>OTD</h1>
+        <form action="/" method="get">
+            <input type="text" id="query" name="query" value="{{ query or '' }}" placeholder="search title, volume, edition, publisher, copyright year, ISBN-10, ISBN-13" autofocus>
+            <input id="submit" type="submit" value=">">
+            <a id="help" href="/help">help</a>
+            <div id="advanced">
+                <label for="num">results per page</label>
+                <select name="num" id="num">
+                {%- for n in (10, 20, 30, 40, 50, total) %}
+                    <option value="{{ n }}"{{ ' selected' if num == n }}>{{ 'all' if loop.last else n }}
+                {%- endfor %}
+                {%- if num not in (10, 20, 30, 40, 50, total) %}
+                    <option value="{{ num }}" selected>{{ num }}
+                {%- endif %}
+                </select>
+                <a{{ ' href="{}"'.format(prev_href|e)|safe if prev_href is not none }}>&lt; prev</a>
+                | {{ from_n }} &ndash; {{ to_n }} of {{ total }} |
+                <a{{ ' href="{}"'.format(next_href|e)|safe if next_href is not none }}>next &gt;</a>
+            </div>
+        </form>
+    </div>
+
 {% for doc in documents %}
     <div class="book">
-        <img src="//{{ config.S3_BUCKET }}.s3.amazonaws.com/i/{{ doc['_id'] }}.y300" alt="{{ doc['title'] }}"><br>
-        <div>
-            <b>{{ doc['title'] }}</b><br>
-            {{ doc['volume'] }}{{ ', ' if doc['volume'] is defined and doc['edition'] is defined }}{{ doc['edition'] }}
-            {{ '<br>'|safe if doc['volume'] is defined or doc['edition'] is defined }}
-            <small><i>&copy; {{ doc['copyright'] }} {{ doc['publisher'] }}</i></small><br>
-            <small>ISBN {{ doc['isbn_10'] }}/{{ doc['isbn_13'] }}</small><br>
-        {%- for method, data in doc['access'].items() %}
-            {%- if data is list %}
-            <a>{{ method }}</a>
-            {% for index in range(data|length) %}
-            <a href="/link/{{ doc['_id'] }}/{{ method }}/{{ index }}">{{ index }}</a>
-            {% endfor %}
-            <br>
-            {% else %}
-            <a href="/link/{{ doc['_id'] }}/{{ method }}">{{ method }}</a><br>
-            {% endif %}
-        {%- endfor %}
+        <img src="//{{ config.S3_BUCKET }}.s3.amazonaws.com/i/{{ doc['_id'] }}.y300" alt="{{ doc['title'] }}">
+        <div class="words">
+            <div class="details">
+                <div class="title">{{ doc['title'] }}</div>
+                <div class="volume">{{ doc['volume'] }}{{ ', ' if doc['volume'] is defined and doc['edition'] is defined }}{{ doc['edition'] }}</div>
+                <div class="copyright">&copy; {{ doc['copyright'] }} {{ doc['publisher'] }}</div>
+                <div class="isbn">ISBN {{ doc['isbn_10'] }}/{{ doc['isbn_13'] }}</div>
+            </div>
+            <div class="access">
+            {%- for method, data in doc['access'].items() %}
+                {%- if data is list %}
+                {{ method }}
+                {% for index in range(data|length) %}
+                <a href="/link/{{ doc['_id'] }}/{{ method }}/{{ index }}">{{ index }}</a>
+                {% endfor %}
+                <br>
+                {% else %}
+                <a href="/link/{{ doc['_id'] }}/{{ method }}">{{ method }}</a><br>
+                {% endif %}
+            {%- endfor %}
+            </div>
         </div>
     </div>
 {% endfor %}
