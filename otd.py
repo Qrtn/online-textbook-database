@@ -84,7 +84,7 @@ def search():
 
 @app.route('/help')
 def help():
-    return app.send_file('static/help.html')
+    return flask.send_file('static/help.html')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
