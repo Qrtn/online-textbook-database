@@ -83,6 +83,14 @@ def glencoe_health_locator(**kwargs):
 
     return flask.redirect('http://www.glencoe.com/sites/common_assets/health/ose/ose_locator.php?' + urlencode(data))
 
+def glencoe_corsair(**kwargs):
+    try:
+        corsair = kwargs['document']['access']['glencoe_corsair']
+    except KeyError:
+        raise InvalidFormat
+
+    return flask.redirect('http://www.glencoe.com/corsair/isbn/{}/content/page/{}.html'.format(corsair['isbn'], corsair['page']))
+
 def classzone_qrtn(**kwargs):
     try:
         title = kwargs['document']['title']
@@ -119,6 +127,7 @@ convert = {
     'glencoe_wl_locator': glencoe_wl_locator,
     'glencoe_ss_locator': glencoe_ss_locator,
     'glencoe_health_locator': glencoe_health_locator,
+    'glencoe_corsair': glencoe_corsair,
     'classzone_qrtn': classzone_qrtn,
     'qrtn_dropbox': qrtn_dropbox,
 }
