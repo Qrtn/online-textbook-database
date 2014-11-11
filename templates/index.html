@@ -5,14 +5,14 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="viewport" content="initial-scale=1">
     <title>Online Textbook Database</title>
-    <link rel="icon" href="//{{ config.S3_BUCKET }}.s3.amazonaws.com/favicon.ico">
-    <link rel="stylesheet" href="//{{ config.S3_BUCKET }}.s3.amazonaws.com/index.css">
+    <link rel="icon" href="{{ config.ASSETS_BASE }}favicon.ico">
+    <link rel="stylesheet" href="{{ config.ASSETS_BASE }}index.css">
 
     {% include 'analytics.html' %}
 </head>
 <body>
     <div id="top">
-        <img src="//{{ config.S3_BUCKET }}.s3.amazonaws.com/logo.y128.png" id="logo" alt="Online Textbook Database" width="128" height="128"><h1>OTD</h1>
+        <img src="{{ config.ASSETS_BASE }}logo.y128.png" id="logo" alt="Online Textbook Database" width="128" height="128"><h1>OTD</h1>
         <form action="/" method="get">
             <input type="text" id="query" name="query" value="{{ query or '' }}" placeholder="search title, volume, edition, publisher, copyright year, ISBN-10, ISBN-13" autofocus>
             <input id="submit" type="submit" value=">">
@@ -36,7 +36,7 @@
 
 {% for doc in documents %}
     <div class="book">
-        <img src="//{{ config.S3_BUCKET }}.s3.amazonaws.com/i/{{ doc['_id'] }}.y300" alt="{{ doc['title'] }}">
+        <img src="{{ config.COVERS_BASE }}{{ doc['_id'] }}.y300" alt="{{ doc['title'] }}">
         <div class="words">
             <div class="details">
                 <div class="title">{{ doc['title'] }}</div>

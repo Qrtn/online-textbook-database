@@ -8,7 +8,7 @@ from fuzzywuzzy import process
 import config
 import resolve
 
-app = flask.Flask(__name__, static_folder=None)
+app = flask.Flask(__name__, static_folder=config.STATIC_FOLDER)
 app.config.from_object(config)
 app.db = MongoClient(config.MONGOLAB_URI).otd
 
