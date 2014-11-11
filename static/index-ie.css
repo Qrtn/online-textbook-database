@@ -1,0 +1,34 @@
+#top {
+    margin-bottom: 20px;
+}
+#logo {
+    float: left;
+}
+h1 {
+    font-size: 128px;
+    line-height: 128px;
+    margin: 0 0 5px 150px;
+}
+#query {
+    width: 500px;
+}
+#advanced {
+    margin-top: 4px;
+}
+.book {
+    display: table;
+    width: 1px;
+    float: left;
+    padding: 0 3px;
+    text-align: center;
+}
+.book img {
+    height: 300px;
+}
+.words {
+    height: 160px;
+    overflow-y: auto;
+}
+.access {
+    line-height: 20px;
+}
