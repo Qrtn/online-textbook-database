@@ -17,7 +17,20 @@
     <div id="top">
         <img src="{{ config.ASSETS_BASE }}logo.y128.png" id="logo" alt="Online Textbook Database" width="128" height="128"><h1>OTD</h1>
         <form action="/" method="get">
-            <input type="text" id="query" name="query" value="{{ query or '' }}" placeholder="search title, volume, edition, publisher, copyright year, ISBN-10, ISBN-13" autofocus>
+            <input type="text" id="query" name="query" value="{{ query or '' }}"
+                placeholder="search title, volume, edition, publisher, copyright year, ISBN-10, ISBN-13"
+                autocapitalize="none" autocorrect="off">
+            <script>
+                query = document.getElementById("query");
+                query.focus()
+                if (typeof query.selectionStart == "number") {
+                    query.selectionStart = query.selectionEnd = query.value.length;
+                } else if (typeof query.createTextRange != "undefined") {
+                    var range = query.createTextRange();
+                    range.collapse(false);
+                    range.select();
+                }
+            </script>
             <input id="submit" type="submit" value=">">
             <a id="help" href="/help">help</a>
             <div id="advanced">
