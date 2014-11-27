@@ -30,5 +30,6 @@ h1 {
     overflow-y: auto;
 }
 .access {
+    font-size: small;
     line-height: 20px;
 }

@@ -1,12 +1,16 @@
+body {
+    font-family: Times, serif;
+}
+
+.access {
+    font-family: Consolas, Monaco, monospace;
+}
+
 .title { font-weight: bold; }
 .copyright { font-size: small; font-style: italic; }
 .isbn { font-size: small; }
 
 .copyright, .isbn { margin: 2px 0; }
-
-.access {
-    font-family: monospace;
-}
 
 @media (min-width: 701px) {
     #top {
@@ -41,6 +45,7 @@
         overflow-y: auto;
     }
     .access {
+        font-size: small;
         line-height: 20px;
     }
 }
@@ -82,8 +87,6 @@
         width: 30%;
         float: left;
         margin-right: 10px;
-    }
-    .details {
     }
     .access {
         font-size: xx-large;
