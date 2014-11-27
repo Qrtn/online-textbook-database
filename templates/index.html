@@ -15,7 +15,8 @@
 </head>
 <body>
     <div id="top">
-        <img src="{{ config.ASSETS_BASE }}logo.y128.png" id="logo" alt="Online Textbook Database" width="128" height="128"><h1>OTD</h1>
+        <img src="{{ config.ASSETS_BASE }}logo.y128.png" id="logo" alt="Online Textbook Database" width="128" height="128">
+        <h1 class="unline">OTD</h1>
         <form action="/" method="get">
             <input type="text" id="query" name="query" value="{{ query or '' }}"
                 placeholder="search title, volume, edition, publisher, copyright year, ISBN-10, ISBN-13"
@@ -31,9 +32,9 @@
                     range.select();
                 }
             </script>
-            <input id="submit" type="submit" value=">">
-            <a id="help" href="/help">help</a>
-            <div id="advanced">
+            <input class="unline" type="submit" value=">">
+            <a class="unline" href="/help">help</a>
+            <div class="unline" id="advanced">
                 <label for="num">results per page</label>
                 <select name="num" id="num">
                 {%- for n in (10, 20, 30, 40, 50, total) %}
