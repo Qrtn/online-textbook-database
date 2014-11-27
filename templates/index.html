@@ -16,7 +16,7 @@
 <body>
     <div id="top">
         <img src="{{ config.ASSETS_BASE }}logo.y128.png" id="logo" alt="Online Textbook Database" width="128" height="128">
-        <h1 class="unline">OTD</h1>
+        <h1>OTD</h1>
         <form action="/" method="get">
             <input type="text" id="query" name="query" value="{{ query or '' }}"
                 placeholder="search title, volume, edition, publisher, copyright year, ISBN-10, ISBN-13"
@@ -32,9 +32,9 @@
                     range.select();
                 }
             </script>
-            <input class="unline" type="submit" value=">">
-            <a class="unline" href="/help">help</a>
-            <div class="unline" id="advanced">
+            <input id="go" type="submit" value=">">
+            <a id="help" href="/help">help</a>
+            <div id="advanced">
                 <span id="pages">
                     <a{{ ' href="{}"'.format(prev_href|e)|safe if prev_href is not none }}>&lt; prev</a>
                     | {{ from_n }} &ndash; {{ to_n }} of {{ total }} |

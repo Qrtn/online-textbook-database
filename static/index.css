@@ -72,7 +72,7 @@ body {
         height: 36px;
         box-sizing: border-box;
     }
-    .unline {
+    h1, #go, #help, #advanced {
         display: none;
     }
     form {
