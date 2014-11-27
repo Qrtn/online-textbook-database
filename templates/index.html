@@ -42,12 +42,12 @@
                 </span>
 
                 <label for="order">sort by</label>
-                <select name="order" id="order">
+                <select name="order" id="order" onchange="this.form.submit()">
                     <option value="-1"{{ 'selected' if order == -1 }}>newest
                     <option value="1"{{ 'selected' if order == 1 }}>oldest
                 </select>
                 with
-                <select name="num" id="num">
+                <select name="num" id="num" onchange="this.form.submit()">
                 {%- for n in (10, 20, 30, 40, 50, total) %}
                     <option value="{{ n }}"{{ ' selected' if num == n }}>{{ 'all' if loop.last else n }}
                 {%- endfor %}
