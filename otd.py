@@ -1,4 +1,5 @@
 import os
+from collections import OrderedDict
 import flask
 
 from pymongo import MongoClient
@@ -12,7 +13,7 @@ app = flask.Flask(__name__, static_folder=config.STATIC_FOLDER)
 app.config.from_object(config)
 app.db = MongoClient(config.MONGOLAB_URI).otd
 
-queries = {document['_id']: document['query'] for document in app.db.books.aggregate([
+queries_items_descending = [(document['_id'], document['query']) for document in app.db.books.aggregate([
     {'$project': {'query': {'$concat': [
         '$title', ' ',
         {'$ifNull': ['$volume', '']}, ' ',
@@ -21,8 +22,11 @@ queries = {document['_id']: document['query'] for document in app.db.books.aggre
         '$copyright', ' ',
         '$isbn_10', ' ',
         '$isbn_13',
-    ]}}}
-])['result']}
+    ]}}},
+    {'$sort': {'_id': -1}},
+])['result']]
+
+queries = {-1: OrderedDict(queries_items_descending), 1: OrderedDict(reversed(queries_items_descending))}
 
 @app.template_test('list')
 def is_list(value):
@@ -46,20 +50,23 @@ def link(id_, access, index=0):
         return 'Invalid index for specified method.'
     return page
 
-def extract(query=None, start=None, stop=None):
+def extract(query=None, start=None, stop=None, order=-1):
+    # order -1 is descending or newest
+    # order 1 is ascending or oldest
     if query is None:
-        yield from app.db.books.find()[start:stop]
+        yield from app.db.books.find().sort('_id', order)[start:stop]
     else:
-        for match in process.extract(query, queries, limit=None)[start:stop]:
+        for match in process.extract(query, queries[order], limit=None)[start:stop]:
             yield app.db.books.find_one(match[2])
+
+SEARCH_QUERY = '/?query={}&start={}&num={}&order={}'
+ORDER_NAMES = {'-1': -1, '1': 1}
 
 @app.route('/')
 def search():
-    SEARCH_QUERY = '/?query={}&start={}&num={}'
-
     query = flask.request.args.get('query', '')
 
-    total = len(queries)
+    total = len(queries_items_descending)
     try:
         start = int(flask.request.args.get('start'))
     except TypeError:
@@ -72,15 +79,17 @@ def search():
         num = 10
     stop = None if num < 0 else start + num
 
-    prev_href = None if start == 0 else SEARCH_QUERY.format(query, start - (start % num or num), num)
-    next_href = None if start + num >= total else SEARCH_QUERY.format(query, start + (num - start % num or num), num)
+    order = ORDER_NAMES.get(flask.request.args.get('order'), -1)
 
-    genresults = extract(query or None, start, stop)
+    prev_href = None if start == 0 else SEARCH_QUERY.format(query, start - (start % num or num), num, order)
+    next_href = None if start + num >= total else SEARCH_QUERY.format(query, start + (num - start % num or num), num, order)
+
+    genresults = extract(query or None, start, stop, order)
 
     return flask.render_template('index.html',
         documents=genresults,
         from_n=(start + 1), to_n=min(start + num, total), prev_href=prev_href, next_href=next_href,
-        query=query, num=num, total=total)
+        query=query, order=order, num=num, total=total)
 
 @app.route('/help')
 def help():

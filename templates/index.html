@@ -35,7 +35,18 @@
             <input class="unline" type="submit" value=">">
             <a class="unline" href="/help">help</a>
             <div class="unline" id="advanced">
-                <label for="num">results per page</label>
+                <span id="pages">
+                    <a{{ ' href="{}"'.format(prev_href|e)|safe if prev_href is not none }}>&lt; prev</a>
+                    | {{ from_n }} &ndash; {{ to_n }} of {{ total }} |
+                    <a{{ ' href="{}"'.format(next_href|e)|safe if next_href is not none }}>next &gt;</a>
+                </span>
+
+                <label for="order">sort by</label>
+                <select name="order" id="order">
+                    <option value="-1"{{ 'selected' if order == -1 }}>newest
+                    <option value="1"{{ 'selected' if order == 1 }}>oldest
+                </select>
+                with
                 <select name="num" id="num">
                 {%- for n in (10, 20, 30, 40, 50, total) %}
                     <option value="{{ n }}"{{ ' selected' if num == n }}>{{ 'all' if loop.last else n }}
@@ -44,9 +55,7 @@
                     <option value="{{ num }}" selected>{{ num }}
                 {%- endif %}
                 </select>
-                <a{{ ' href="{}"'.format(prev_href|e)|safe if prev_href is not none }}>&lt; prev</a>
-                | {{ from_n }} &ndash; {{ to_n }} of {{ total }} |
-                <a{{ ' href="{}"'.format(next_href|e)|safe if next_href is not none }}>next &gt;</a>
+                <label for="num">results per page</label>
             </div>
         </form>
     </div>

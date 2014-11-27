@@ -15,6 +15,11 @@ h1 {
 #advanced {
     margin-top: 4px;
 }
+#pages {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
 .book {
     display: table;
     width: 1px;
