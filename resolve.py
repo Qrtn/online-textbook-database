@@ -131,3 +131,18 @@ convert = {
     'classzone_qrtn': classzone_qrtn,
     'qrtn_dropbox': qrtn_dropbox,
 }
+
+priority = {
+    'qrtn_dropbox': 0,
+    'hrw': 1,
+    'classzone_qrtn': 1,
+    'glencoe_showbook': 1,
+    'glencoe_wl_locator': 2,
+    'glencoe_ss_locator': 2,
+    'glencoe_health_locator': 2,
+    'glencoe_swf_lit': 3,
+    'glencoe_swf_ss': 3,
+    'glencoe_corsair': 3,
+    'glencoe_pdf_la': 4,
+    'glencoe_pdfserver': 4,
+}

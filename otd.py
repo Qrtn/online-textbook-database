@@ -32,6 +32,17 @@ queries = {-1: OrderedDict(queries_items_descending), 1: OrderedDict(reversed(qu
 def is_list(value):
     return isinstance(value, list)
 
+@app.template_filter('dictprioritize')
+def dictprioritize_filter(value):
+    # template will pass in doc['access']; dictprioritize returns access
+    # methods and data sorted by priority
+
+    # each access method function in resolve.convert requires a corresponding
+    # access method priority int in resolve.priority, or KeyError will be
+    # raised here when template sorts document access dictionary
+
+    return sorted(value.items(), key=lambda x: resolve.priority[x[0]])
+
 @app.route('/favicon.ico')
 def favicon():
     return flask.redirect(config.ASSETS_BASE + 'favicon.ico')
@@ -87,7 +98,7 @@ def search():
     genresults = extract(query or None, start, stop, order)
 
     return flask.render_template('index.html',
-        documents=genresults,
+        documents=genresults, priority=resolve.priority,
         from_n=(start + 1), to_n=min(start + num, total), prev_href=prev_href, next_href=next_href,
         query=query, order=order, num=num, total=total)
 

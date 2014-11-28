@@ -71,7 +71,7 @@
                 <div class="isbn">ISBN {{ doc['isbn_10'] }}/{{ doc['isbn_13'] }}</div>
             </div>
             <div class="access">
-            {%- for method, data in doc['access'].items() %}
+            {%- for method, data in doc['access']|dictprioritize %}
                 {%- if data is list %}
                 {{ method }}
                 {% for index in range(data|length) %}
