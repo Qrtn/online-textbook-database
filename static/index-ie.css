@@ -38,3 +38,7 @@ h1 {
     font-size: small;
     line-height: 20px;
 }
+.canonical {
+    background-color: lightgray;
+    font-weight: bold;
+}

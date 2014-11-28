@@ -72,15 +72,16 @@
             </div>
             <div class="access">
             {%- for method, data in doc['access']|dictprioritize %}
-                {%- if data is list %}
-                {{ method }}
-                {% for index in range(data|length) %}
-                <a href="/link/{{ doc['_id'] }}/{{ method }}/{{ index }}">{{ index }}</a>
-                {% endfor %}
-                <br>
-                {% else %}
-                <a href="/link/{{ doc['_id'] }}/{{ method }}">{{ method }}</a><br>
-                {% endif %}
+                <div{{ ' class="canonical"'|safe if loop.first }}>
+                    {%- if data is list %}
+                    {{ method }}
+                    {% for index in range(data|length) %}
+                    <a href="/link/{{ doc['_id'] }}/{{ method }}/{{ index }}">{{ index }}</a>
+                    {% endfor %}
+                    {% else %}
+                    <a href="/link/{{ doc['_id'] }}/{{ method }}">{{ method }}</a>
+                    {% endif %}
+                </div>
             {%- endfor %}
             </div>
         </div>
