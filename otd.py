@@ -143,8 +143,7 @@ def search():
 def help():
     return flask.send_file('static/help.html')
 
-
-if True:
+if not app.debug:
     handler = loghandler.MongoHandler(app.db.log)
 
     del app.logger.handlers[:]
