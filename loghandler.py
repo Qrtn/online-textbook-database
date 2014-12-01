@@ -1,5 +1,6 @@
 import logging
 import traceback
+import pprint
 from datetime import datetime
 
 import flask
@@ -34,9 +35,9 @@ class MongoHandler(logging.Handler):
                 'traceback': ''.join(traceback.format_exception(*record.exc_info)),
             })
 
-        print(document)
-
         try:
             self.collection.insert(document)
         except Exception as e:
             traceback.print_exc()
+
+        pprint.pprint(document)
