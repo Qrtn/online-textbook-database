@@ -144,6 +144,8 @@ def help():
     return flask.send_file('static/help.html')
 
 if not app.debug:
+    app.logger.setLevel(logging.DEBUG)
+
     handler = loghandler.MongoHandler(app.db.log)
 
     del app.logger.handlers[:]
