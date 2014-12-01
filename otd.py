@@ -1,6 +1,10 @@
 import os
+import logging
+import time
 from collections import OrderedDict
+
 import flask
+import werkzeug.exceptions
 
 from pymongo import MongoClient
 
@@ -8,6 +12,7 @@ from fuzzywuzzy import process
 
 import config
 import resolve
+import loghandler
 
 app = flask.Flask(__name__, static_folder=config.STATIC_FOLDER)
 app.config.from_object(config)
@@ -43,6 +48,28 @@ def dictprioritize_filter(value):
 
     return sorted(value.items(), key=lambda x: resolve.priority[x[0]])
 
+@app.before_request
+def before_request():
+    flask.g.start = time.time()
+
+@app.after_request
+def after_request(response):
+    flask.g.status = response.status
+    return response
+
+@app.teardown_request
+def teardown_request(exception=None):
+    diff = time.time() - flask.g.start
+    app.logger.debug({
+        'execution_time': diff,
+        'status': flask.g.status,
+    })
+
+@app.errorhandler(Exception)
+def log_exception(error):
+    app.logger.exception({})
+    return werkzeug.exceptions.InternalServerError()
+
 @app.route('/favicon.ico')
 def favicon():
     return flask.redirect(config.ASSETS_BASE + 'favicon.ico')
@@ -50,6 +77,12 @@ def favicon():
 @app.route('/link/<int:id_>/<access>', methods=['GET'])
 @app.route('/link/<int:id_>/<access>/<int:index>', methods=['GET'])
 def link(id_, access, index=0):
+    app.logger.info({
+        'book': id_,
+        'access': access,
+        'index': index,
+    })
+
     document = app.db.books.find_one(id_)
     try:
         page = resolve.convert[access](document=document, index=index)
@@ -75,6 +108,10 @@ ORDER_NAMES = {'-1': -1, '1': 1}
 
 @app.route('/')
 def search():
+    app.logger.info({
+        'search': flask.request.args.to_dict(),
+    })
+
     query = flask.request.args.get('query', '')
 
     total = len(queries_items_descending)
@@ -105,6 +142,13 @@ def search():
 @app.route('/help')
 def help():
     return flask.send_file('static/help.html')
+
+
+if True:
+    handler = loghandler.MongoHandler(app.db.log)
+
+    del app.logger.handlers[:]
+    app.logger.addHandler(handler)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
