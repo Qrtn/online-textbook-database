@@ -4,7 +4,8 @@ import time
 from collections import OrderedDict
 
 import flask
-import werkzeug.exceptions
+from werkzeug.exceptions import InternalServerError
+from werkzeug.contrib.fixers import ProxyFix
 
 from pymongo import MongoClient
 
@@ -17,6 +18,9 @@ import loghandler
 app = flask.Flask(__name__, static_folder=config.STATIC_FOLDER)
 app.config.from_object(config)
 app.db = MongoClient(config.MONGOLAB_URI).otd
+
+# OTD (for now) runs behind Heroku reverse proxies, changing remote_addr
+app.wsgi_app = ProxyFix(app.wsgi_app)
 
 queries_items_descending = [(document['_id'], document['query']) for document in app.db.books.aggregate([
     {'$project': {'query': {'$concat': [
@@ -68,7 +72,7 @@ def teardown_request(exception=None):
 @app.errorhandler(Exception)
 def log_exception(error):
     app.logger.exception({})
-    return werkzeug.exceptions.InternalServerError()
+    return InternalServerError()
 
 @app.route('/favicon.ico')
 def favicon():
