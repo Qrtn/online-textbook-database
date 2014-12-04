@@ -78,6 +78,14 @@ def log_exception(error):
 def favicon():
     return flask.redirect(config.ASSETS_BASE + 'favicon.ico')
 
+@app.route('/robots.txt')
+def robots():
+    return flask.send_file('static/robots.txt')
+
+@app.route('/help')
+def help():
+    return flask.send_file('static/help.html')
+
 @app.route('/link/<int:id_>/<access>', methods=['GET'])
 @app.route('/link/<int:id_>/<access>/<int:index>', methods=['GET'])
 def link(id_, access, index=0):
@@ -142,10 +150,6 @@ def search():
         documents=genresults, priority=resolve.priority,
         from_n=(start + 1), to_n=min(start + num, total), prev_href=prev_href, next_href=next_href,
         query=query, order=order, num=num, total=total)
-
-@app.route('/help')
-def help():
-    return flask.send_file('static/help.html')
 
 del app.logger.handlers[:]
 
