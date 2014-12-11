@@ -1,10 +1,7 @@
-import os
-import logging
 import time
 from collections import OrderedDict
 
 import flask
-from werkzeug.exceptions import InternalServerError
 from werkzeug.contrib.fixers import ProxyFix
 
 from pymongo import MongoClient
@@ -13,11 +10,16 @@ from fuzzywuzzy import process
 
 import config
 import resolve
-import loghandler
+import tracking
 
 app = flask.Flask(__name__, static_folder=config.STATIC_FOLDER)
 app.config.from_object(config)
 app.db = MongoClient(config.MONGOLAB_URI).otd
+
+if not app.debug:
+    tracker = tracking.Tracker(app.db.log)
+else:
+    tracker = tracking.Tracker(app.db.log, insert=False)
 
 # OTD (for now) runs behind Heroku reverse proxies, changing remote_addr
 app.wsgi_app = ProxyFix(app.wsgi_app)
@@ -64,15 +66,15 @@ def after_request(response):
 @app.teardown_request
 def teardown_request(exception=None):
     diff = time.time() - flask.g.start
-    app.logger.debug({
+    tracker.track_http_event('request', {
         'execution_time': diff,
         'status': flask.g.status,
     })
 
 @app.errorhandler(Exception)
-def log_exception(error):
-    app.logger.exception({})
-    return InternalServerError()
+def errorhandler(error):
+    tracker.track_error()
+    raise
 
 @app.route('/favicon.ico')
 def favicon():
@@ -89,10 +91,12 @@ def help():
 @app.route('/link/<int:id_>/<access>', methods=['GET'])
 @app.route('/link/<int:id_>/<access>/<int:index>', methods=['GET'])
 def link(id_, access, index=0):
-    app.logger.info({
-        'book': id_,
-        'access': access,
-        'index': index,
+    tracker.track_http_event('access', {
+        'access': {
+            'book': id_,
+            'method': access,
+            'index': index,
+        },
     })
 
     document = app.db.books.find_one(id_)
@@ -120,10 +124,6 @@ ORDER_NAMES = {'-1': -1, '1': 1}
 
 @app.route('/')
 def search():
-    app.logger.info({
-        'search': flask.request.args.to_dict(),
-    })
-
     query = flask.request.args.get('query', '')
 
     total = len(queries_items_descending)
@@ -141,6 +141,15 @@ def search():
 
     order = ORDER_NAMES.get(flask.request.args.get('order'), -1)
 
+    tracker.track_http_event('search', {
+        'search': {
+            'query': query,
+            'start': start,
+            'num': num,
+            'order': order,
+        },
+    })
+
     prev_href = None if start == 0 else SEARCH_QUERY.format(query, start - (start % num or num), num, order)
     next_href = None if start + num >= total else SEARCH_QUERY.format(query, start + (num - start % num or num), num, order)
 
@@ -150,15 +159,6 @@ def search():
         documents=genresults, priority=resolve.priority,
         from_n=(start + 1), to_n=min(start + num, total), prev_href=prev_href, next_href=next_href,
         query=query, order=order, num=num, total=total)
-
-del app.logger.handlers[:]
-
-if not app.debug:
-    app.logger.setLevel(logging.DEBUG)
-
-    handler = loghandler.MongoHandler(app.db.log)
-
-    app.logger.addHandler(handler)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
