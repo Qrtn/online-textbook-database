@@ -44,13 +44,15 @@ def is_list(value):
     return isinstance(value, list)
 
 @app.template_filter('dictprioritize')
-def dictprioritize_filter(value):
+def dictprioritize(value):
     # template will pass in doc['access']; dictprioritize returns access
     # methods and data sorted by priority
 
     # each access method function in resolve.convert requires a corresponding
     # access method priority int in resolve.priority, or KeyError will be
     # raised here when template sorts document access dictionary
+
+    # also called in /link without access method to route to canonical access
 
     return sorted(value.items(), key=lambda x: resolve.priority[x[0]])
 
@@ -88,9 +90,16 @@ def robots():
 def help():
     return flask.send_file('static/help.html')
 
-@app.route('/link/<int:id_>/<access>', methods=['GET'])
-@app.route('/link/<int:id_>/<access>/<int:index>', methods=['GET'])
-def link(id_, access, index=0):
+@app.route('/<int:id_>')
+@app.route('/link/<int:id_>')
+@app.route('/link/<int:id_>/<access>')
+@app.route('/link/<int:id_>/<access>/<int:index>')
+def link(id_, access=None, index=0):
+    document = app.db.books.find_one(id_)
+
+    if access is None:
+        access = dictprioritize(document['access'])[0][0]
+
     tracker.track_http_event('access', {
         'access': {
             'book': id_,
@@ -99,7 +108,6 @@ def link(id_, access, index=0):
         },
     })
 
-    document = app.db.books.find_one(id_)
     try:
         page = resolve.convert[access](document=document, index=index)
     except KeyError:
