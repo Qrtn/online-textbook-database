@@ -15,9 +15,16 @@ h1 {
 #advanced {
     margin-top: 4px;
 }
-#pages {
+#pages, #shelfid {
     font-weight: bold;
     margin-right: 5px;
+}
+#redirect {
+    vertical-align: text-bottom;
+    margin: 0 2px 1px 4px;
+}
+#home {
+    color: blue;
 }
 
 .book {

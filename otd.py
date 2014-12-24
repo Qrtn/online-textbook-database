@@ -165,10 +165,25 @@ def search():
 
     genresults = extract(query or None, start, stop, order)
 
-    return flask.render_template('index.html',
+    return flask.render_template('search.html',
         documents=genresults,
         from_n=(start + 1), to_n=min(start + num, total), prev_href=prev_href, next_href=next_href,
         query=query, order=order, num=num, total=total)
+
+@app.route('/shelf/<int:id_>')
+def shelf(id_):
+    tracker.track_http_event('shelf', {
+        'shelf': id_,
+    })
+
+    shelf = db.shelves.find_one(id_)
+    if shelf is None:
+        return 'No such shelf.'
+
+    documents = (db.books.find_one(bookid) for bookid in shelf['books'])
+
+    return flask.render_template('shelf.html',
+        documents=documents, shelfid=id_)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
