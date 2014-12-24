@@ -96,6 +96,8 @@ def help():
 @app.route('/link/<int:id_>/<access>/<int:index>')
 def link(id_, access=None, index=0):
     document = db.books.find_one(id_)
+    if document is None:
+        return 'No such book.'
 
     if access is None:
         access = dictprioritize(document['access'])[0][0]
