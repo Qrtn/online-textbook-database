@@ -14,17 +14,17 @@ import tracking
 
 app = flask.Flask(__name__, static_folder=config.STATIC_FOLDER)
 app.config.from_object(config)
-app.db = MongoClient(config.MONGOLAB_URI).otd
+db = MongoClient(config.MONGOLAB_URI).otd
 
 if not app.debug:
-    tracker = tracking.Tracker(app.db.log)
+    tracker = tracking.Tracker(db.log)
 else:
-    tracker = tracking.Tracker(app.db.log, insert=False)
+    tracker = tracking.Tracker(db.log, insert=False)
 
 # OTD (for now) runs behind Heroku reverse proxies, changing remote_addr
 app.wsgi_app = ProxyFix(app.wsgi_app)
 
-queries_items_descending = [(document['_id'], document['query']) for document in app.db.books.aggregate([
+queries_items_descending = [(document['_id'], document['query']) for document in db.books.aggregate([
     {'$project': {'query': {'$concat': [
         '$title', ' ',
         {'$ifNull': ['$volume', '']}, ' ',
@@ -95,7 +95,7 @@ def help():
 @app.route('/link/<int:id_>/<access>')
 @app.route('/link/<int:id_>/<access>/<int:index>')
 def link(id_, access=None, index=0):
-    document = app.db.books.find_one(id_)
+    document = db.books.find_one(id_)
 
     if access is None:
         access = dictprioritize(document['access'])[0][0]
@@ -122,10 +122,10 @@ def extract(query=None, start=None, stop=None, order=-1):
     # order -1 is descending or newest
     # order 1 is ascending or oldest
     if query is None:
-        yield from app.db.books.find().sort('_id', order)[start:stop]
+        yield from db.books.find().sort('_id', order)[start:stop]
     else:
         for match in process.extract(query, queries[order], limit=None)[start:stop]:
-            yield app.db.books.find_one(match[2])
+            yield db.books.find_one(match[2])
 
 SEARCH_QUERY = '/?query={}&start={}&num={}&order={}'
 ORDER_NAMES = {'-1': -1, '1': 1}
@@ -164,7 +164,7 @@ def search():
     genresults = extract(query or None, start, stop, order)
 
     return flask.render_template('index.html',
-        documents=genresults, priority=resolve.priority,
+        documents=genresults,
         from_n=(start + 1), to_n=min(start + num, total), prev_href=prev_href, next_href=next_href,
         query=query, order=order, num=num, total=total)
 
