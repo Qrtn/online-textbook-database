@@ -41,7 +41,6 @@
                 <input id="redirect" type="checkbox">
                 <script>
                     checkbox = document.getElementById("redirect");
-                    checkbox.checked = false;
 
                     var ca = document.cookie.split(";");
                     for (var i = 0; i < ca.length; i++) {
@@ -52,7 +51,7 @@
 
                     checkbox.onclick = function () {
                         if (checkbox.checked) {
-                            var expires = "expires=" + (new Date(Date.now() + 15552000)).toUTCString();
+                            var expires = "expires=" + (new Date(Date.now() + 15552000000)).toUTCString();
                             document.cookie = "shelf={{ shelfid }}; path=/; " + expires;
                         }
                         else {
