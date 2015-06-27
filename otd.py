@@ -35,7 +35,7 @@ queries_items_descending = [(document['_id'], document['query']) for document in
         '$isbn_13',
     ]}}},
     {'$sort': {'_id': -1}},
-])['result']]
+])]
 
 queries = {-1: OrderedDict(queries_items_descending), 1: OrderedDict(reversed(queries_items_descending))}
 
